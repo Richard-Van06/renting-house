@@ -4,7 +4,7 @@ export default class Index extends Component {
   render() {
     return (
       <div>
-        login
+        这里是用户信息----my
       </div>
     )
   }
