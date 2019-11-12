@@ -9,6 +9,11 @@ import './assets/fonts/iconfont.css'
 // 最后导入我们自己的样式文件
 import './index.css'
 
+/**
+ * 导入axios, 这里并不需要 import xxx from 'xxx'
+ * 因为只是为了让wabpack执行 axios 代码  不是获取 axios的东西
+ */
+import './utils/axios'
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
