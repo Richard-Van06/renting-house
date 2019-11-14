@@ -4,7 +4,7 @@ import styles from './index.module.scss'
 // 导入路由
 import { Link } from 'react-router-dom'
 // 导入ui
-import { Carousel, Flex } from 'antd-mobile'
+import { Carousel, Flex, Grid } from 'antd-mobile'
 // 导入基地址
 import { BASEURL } from '../../utils/url'
 
@@ -18,7 +18,8 @@ export default class Index extends Component {
   // 定义模型---把数据交给模型才能渲染
   state = {
     swipers: null, // 轮播图
-    imgHeight: 212 // 轮播图图片高度
+    imgHeight: 212, // 轮播图图片高度
+    groups: null //租房小组
   }
   navs = [
     { icon: image1, text: '整租', path: '/layout/houselist' },
@@ -29,6 +30,8 @@ export default class Index extends Component {
   componentDidMount() {
     // 获取轮播图数据
     this.getSwiperData()
+    // 获取租房小组的数据
+    this.getGroupsData()
   }
 
   // 获取轮播图数据的 方法
@@ -37,6 +40,17 @@ export default class Index extends Component {
     // console.log(result)
     this.setState({
       swipers: result.data.body
+    })
+  }
+
+  // 获取租房小组数据
+  getGroupsData = async () => {
+    const result = await this.http.get(
+      '/home/groups?area=AREA%7C88cff55c-aaa4-e2e0'
+    )
+    console.log(result)
+    this.setState({
+      groups: result.data.body
     })
   }
 
@@ -88,6 +102,42 @@ export default class Index extends Component {
     )
   }
 
+  // 渲染租房小组
+  renderGroups = () => {
+    return (
+      <div className={styles.groups}>
+        <Flex>
+          <Flex.Item>
+            <span className={styles.title}>租房小组</span>
+          </Flex.Item>
+          <Flex.Item align="end">
+            <span>更多</span>
+          </Flex.Item>
+        </Flex>
+        {/* 下方宫格 */}
+        <Grid
+          data={this.state.groups}
+          columnNum={2}
+          hasLine={false}
+          square={false}
+          renderItem={dataItem => {
+            return (
+              <div className={styles.navItem} key={dataItem.id}>
+                <div className={styles.left}>
+                  <p>{dataItem.title}</p>
+                  <p>{dataItem.desc}</p>
+                </div>
+                <div className={styles.right}>
+                  <img src={`${BASEURL}${dataItem.imgSrc}`} alt="" />
+                </div>
+              </div>
+            )
+          }}
+        />
+      </div>
+    )
+  }
+
   render() {
     return (
       <div className={styles.root}>
@@ -95,6 +145,8 @@ export default class Index extends Component {
         {this.state.swipers && this.renderSwiper()}
         {/* 渲染导航菜单 */}
         {this.renderNavs()}
+        {/* 渲染租房小组 */}
+        {this.state.groups && this.renderGroups()}
       </div>
     )
   }
