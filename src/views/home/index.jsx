@@ -19,7 +19,8 @@ export default class Index extends Component {
   state = {
     swipers: null, // 轮播图
     imgHeight: 212, // 轮播图图片高度
-    groups: null //租房小组
+    groups: null, //租房小组
+    news: null //最新资讯
   }
   navs = [
     { icon: image1, text: '整租', path: '/layout/houselist' },
@@ -32,6 +33,8 @@ export default class Index extends Component {
     this.getSwiperData()
     // 获取租房小组的数据
     this.getGroupsData()
+    // 获取资讯的数据
+    this.getNewsData()
   }
 
   // 获取轮播图数据的 方法
@@ -48,9 +51,20 @@ export default class Index extends Component {
     const result = await this.http.get(
       '/home/groups?area=AREA%7C88cff55c-aaa4-e2e0'
     )
-    console.log(result)
+    // console.log(result)
     this.setState({
       groups: result.data.body
+    })
+  }
+
+  // 获取最新资讯的数据
+  getNewsData = async () => {
+    const result = await this.http.get(
+      '/home/news?area=AREA%7C88cff55c-aaa4-e2e0'
+    )
+    console.log(result)
+    this.setState({
+      news: result.data.body
     })
   }
 
@@ -138,6 +152,35 @@ export default class Index extends Component {
     )
   }
 
+  // 渲染最新资讯
+  renderNews = () => {
+    return (
+      <div className={styles.news}>
+        <h3 className={styles.groupTitle}>最新资讯</h3>
+        {
+          this.state.news.map(item => {
+            return <div className={styles.newsItem} key={item.id}>
+              {/* 左边内容 */}
+              <div className={styles.imgWrap}>
+                <img src={`${BASEURL}${item.imgSrc}`} alt=""/>
+              </div>
+              {/* 右边内容 */}
+              <div>
+                <Flex className={styles.content} direction="column" justify="between">
+                  <p className={styles.title}>{item.title}</p>
+                  <Flex justify="between" className={styles.info}>
+                    <span>{item.from}</span>
+                    <span>{item.date}</span>
+                  </Flex>
+                </Flex>
+              </div>
+            </div>
+          })
+        }
+      </div>
+    )
+  }
+
   render() {
     return (
       <div className={styles.root}>
@@ -147,6 +190,8 @@ export default class Index extends Component {
         {this.renderNavs()}
         {/* 渲染租房小组 */}
         {this.state.groups && this.renderGroups()}
+        {/* 渲染最新资讯 */}
+        {this.state.news && this.renderNews()}
       </div>
     )
   }
