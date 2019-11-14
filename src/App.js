@@ -7,6 +7,8 @@ import { HashRouter as Router, Switch, Redirect, Route } from 'react-router-dom'
 // 导入子组件
 import Layout from './views/layout'
 import Login from './views/login'
+import CityList from './views/citylist'
+import Map from './views/map'
 
 // 404
 function NotFound() {
@@ -20,6 +22,8 @@ function App() {
         <Switch>
           <Route path="/layout" component={Layout} />
           <Route path="/login" component={Login} />
+          <Route path="/citylist" component={CityList} />
+          <Route path="/map" component={Map} />
           <Redirect exact from="/" to="/layout" />
           <Route component={NotFound} />
         </Switch>

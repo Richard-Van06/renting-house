@@ -14,13 +14,17 @@ import image2 from '../../assets/images/nav-2.png'
 import image3 from '../../assets/images/nav-3.png'
 import image4 from '../../assets/images/nav-4.png'
 
+// 导入子组件
+import SearchHeader from '../../components/SearchHeader'
+
 export default class Index extends Component {
   // 定义模型---把数据交给模型才能渲染
   state = {
     swipers: null, // 轮播图
     imgHeight: 212, // 轮播图图片高度
     groups: null, //租房小组
-    news: null //最新资讯
+    news: null, //最新资讯
+    cityName: '北京'
   }
   navs = [
     { icon: image1, text: '整租', path: '/layout/houselist' },
@@ -184,6 +188,8 @@ export default class Index extends Component {
   render() {
     return (
       <div className={styles.root}>
+        {/* 渲染搜索栏 */}
+        <SearchHeader cityName={this.state.cityName} />
         {/* 渲染轮播图 */}
         {this.state.swipers && this.renderSwiper()}
         {/* 渲染导航菜单 */}
